@@ -1,0 +1,56 @@
+<html>
+<head>
+  <title>Game</title>
+  <script type="text/javascript" src="game.js"></script>
+</head>
+<body>
+  <button onclick="Start1()">Start</button>
+  <canvas id="paper" width="800" height="500">
+  </canvas>
+</body>
+  <script type="text/javascript">   
+    var canvas = document.getElementById("paper");
+    var context = canvas.getContext('2d');
+    var currentStamp = new Date().getTime();       
+    var targetX = canvas.width / 2;
+    var targetY = canvas.height / 2;
+    var c1 =  {
+      x: 100, 
+      y: 300,
+      radius: 50,
+      color: 'red',
+      v: 100
+    };
+    var c2 =  {
+      x: 500, 
+      y: 300,
+      radius: 50,
+      color: 'blue',
+      v: 100
+    };
+      function draw1(){ 
+          context.clearRect(0, 0, canvas.width, canvas.height); 
+          context.beginPath();
+          context.arc(c1.x, c1.y, c1.radius, 0, 2 * Math.PI, false);
+          context.fillStyle = c1.color;
+          context.fill();
+        
+      };
+      function draw2(){     
+          context.clearRect(0, 0, canvas.width, canvas.height); 
+          context.beginPath();
+          context.arc(c2.x, c2.y, c2.radius, 0, 2 * Math.PI, false);
+          context.fillStyle = c2.color;
+          context.fill();
+        };
+        lastStamp = currentStamp;
+      
+      function Start1(){
+        draw2()
+        draw1();
+        if (c1.x < canvas.width/2) {
+          c1.x ++;
+        }
+      };
+  </script>
+</html>
