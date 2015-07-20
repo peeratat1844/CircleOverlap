@@ -1,56 +1,123 @@
-<html>
-<head>
-  <title>Game</title>
-  <script type="text/javascript" src="game.js"></script>
-</head>
-<body>
-  <button onclick="Start1()">Start</button>
-  <canvas id="paper" width="800" height="500">
-  </canvas>
-</body>
-  <script type="text/javascript">   
-    var canvas = document.getElementById("paper");
-    var context = canvas.getContext('2d');
-    var currentStamp = new Date().getTime();       
-    var targetX = canvas.width / 2;
-    var targetY = canvas.height / 2;
-    var c1 =  {
-      x: 100, 
-      y: 300,
-      radius: 50,
-      color: 'red',
-      v: 100
-    };
-    var c2 =  {
-      x: 500, 
-      y: 300,
-      radius: 50,
-      color: 'blue',
-      v: 100
-    };
-      function draw1(){ 
-          context.clearRect(0, 0, canvas.width, canvas.height); 
-          context.beginPath();
-          context.arc(c1.x, c1.y, c1.radius, 0, 2 * Math.PI, false);
-          context.fillStyle = c1.color;
-          context.fill();
-        
+  <html>
+  <head>
+    <title>CircleOverlap</title>
+  </head>
+  <body onkeydown="keyCode(event)">
+    <center><font face="algerian" size="5" color="green">CircleOverlap</font></center>
+    <button onclick="Start()">Start</button>
+    <font face="impact" color="blue" style="font-size:150%">SCORE :</font>
+    <font id="score" face="impact" color="red" style="font-size:150%">0</font> 
+    <canvas id="paper" width="1200" height="500">
+    </canvas>
+    <script type="text/javascript">   
+      var lastStamp = 0;
+      var gameRunning = false;
+      var canvas = document.getElementById("paper");
+      var targetX = random(700, 100);
+      var targetY = random(400, 100);
+      var size = random(50, 5);
+      var ranV = random(150, 80);
+      var ranC = ['red', 'blue', 'green', 'pink'];
+      var score = 0;
+      var currentStamp = new Date().getTime();
+      var context = canvas.getContext('2d');
+      var c1 =  {
+        x: random(300, 100),
+        y: random(400, 200),
+        radius: size,
+        color: ranC[random(ranC.length)],
       };
-      function draw2(){     
-          context.clearRect(0, 0, canvas.width, canvas.height); 
-          context.beginPath();
-          context.arc(c2.x, c2.y, c2.radius, 0, 2 * Math.PI, false);
-          context.fillStyle = c2.color;
-          context.fill();
+      var c2 =  {
+        x: random(600, 400), 
+        y: random(300, 200),
+        radius: size,
+        color: ranC[random(ranC.length)],
+      };
+        function draw(){
+        setInterval(function(){
+          if (gameRunning) {
+            context.clearRect(0, 0, canvas.width, canvas.height); 
+            context.beginPath();
+            context.arc(c1.x, c1.y, c1.radius, 0, 2 * Math.PI, false);
+            context.fillStyle = c1.color;
+            context.fill();
+            context.beginPath();
+            context.arc(c2.x, c2.y, c2.radius, 0, 2 * Math.PI, false);
+            context.fillStyle = c2.color;
+            context.fill();
+            toX();
+            toY();
+          };
+          lastStamp = currentStamp;
+        }, ranV);
+        window.requestAnimationFrame(draw);
+      }
+      window.requestAnimationFrame(draw);
+      function Start(){
+        gameRunning = true;
+      }
+      function random(to, from){
+        from = from || 0;
+        return Math.floor((Math.random() * to) + from);
+      }
+      function distance(x1, y1, x2, y2){
+        return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+      }
+      function checkHit(){
+        if(distance(c1.x, c2.y, c2.x, c2.y) <= c1.radius + c2.radius){
+            return true;
+        }
+        return false;
+      }
+      function ScorePlus(){
+        document.getElementById("score").innerHTML = (score += 1);
+      }
+      function keyCode(event){
+        //กด Spacebar 
+        if (event.keyCode == 32) {
+          if (c1.color != c2.color) {
+            checkHit();
+            if (checkHit()) {
+            ScorePlus();
+            return score;
+            };
+          };
+          next();
         };
-        lastStamp = currentStamp;
-      
-      function Start1(){
-        draw2()
-        draw1();
-        if (c1.x < canvas.width/2) {
+      }
+      function next(){
+        location.reload();
+        gameRunning = true;
+        window.requestAnimationFrame(draw);
+      }
+      function toX(){
+        if (c1.x < targetX) {
           c1.x ++;
         }
-      };
-  </script>
-</html>
+        if (c1.x > targetX) {
+          c1.x --;
+        }
+        if (c2.x > targetX) {
+          c2.x --;
+        }
+        if (c2.x < targetX) {
+          c2.x ++;
+        }
+      }
+      function toY(){
+        if (c1.y > targetY) {
+          c1.y --;
+        }
+        if (c1.y < targetY) {
+          c1.y ++;
+        }
+        if (c2.y > targetY) {
+          c2.y --;
+        }
+        if (c2.y < targetY) {
+          c2.y ++;
+        }
+      }
+      </script>
+      </body>
+  </html>
